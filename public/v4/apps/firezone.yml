@@ -7,20 +7,13 @@ services:
     restart: always
     depends-on: $$cap_appname-postgres
     command: "bin/server"
-    cap_add:
-      - CAP_NET_ADMIN
-      - CAP_SYS_MODULE
     ports:
       - 51820:51820
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=0
-      - net.ipv4.ip_forward=1
-      - net.ipv6.conf.all.forwarding=1
     environment:
       EXTERNAL_URL: https://$$cap_appname.$$cap_root_domain
       DATABASE_HOST: srv-captain--$$cap_appname-postgres
       DATABASE_PORT: 5432
-      DATABASE_NAME: postgres
+      DATABASE_NAME: app
       DATABASE_USER: app
       DATABASE_PASSWORD: app
       DEFAULT_ADMIN_EMAIL: $$cap_default_email
@@ -41,6 +34,7 @@ services:
     environment:
       POSTGRES_USER: app
       POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
       PGDATA: /data/postgres
     caproverExtra:
       notExposeAsWebApp: 'true'
@@ -60,29 +54,47 @@ caproverOneClickApp:
       label: Default E-Mail
     - id: $$cap_default_password
       label: Default password
+      description: Minimum 6 symbols
     - id: $$cap_guardian_key
       label: Guardian key
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_encryption_key
       label: Encryption key
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_secret_key
       label: Secret key
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_live_view_salt
       label: Live view salt
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_cookie_signing_salt
       label: Cookie signing salt
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_cookie_encryption_salt
       label: Cookie encryption salt
-      description: More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
   instructions:
     start: To generate secret keys, use `openssl rand -base64 64`
     end: |
       Firezone is deployed and available from the url http://$$cap_appname.$$cap_root_domain.
-      Run `docker service scale srv-captain--$$cap_appname=0 && docker service update --cap-add NET_ADMIN --cap-add SYS_MODULE --sysctl-add net.ipv6.conf.all.disable_ipv6=0 --sysctl-add net.ipv4.ip_forward=1 --sysctl-add net.ipv6.conf.all.forwarding=1 srv-captain--$$cap_appname && docker service scale srv-captain--$$cap_appname=1`
+      Add to Service Update Override: 
+      ```json
+      {
+        "TaskTemplate": {
+          "ContainerSpec": {
+            "SysCtls": {
+              "net.ipv4.ip_forward": "1",
+              "net.ipv6.conf.all.disable_ipv6": "0",
+              "net.ipv6.conf.all.forwarding": "1"
+            }
+          }
+        }
+      }
+      ```
+      Then run:
+      ```bash
+      docker service scale srv-captain--$$cap_appname=0 && docker service update --cap-add NET_ADMIN --cap-add SYS_MODULE srv-captain--$$cap_appname && docker service scale srv-captain--$$cap_appname=1
+      ```
   displayName: Firezone
   description: Firezone
   documentation: https://www.firezone.dev/docs
