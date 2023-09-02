@@ -18,6 +18,7 @@ services:
       DATABASE_PASSWORD: app
       DEFAULT_ADMIN_EMAIL: $$cap_default_email
       DEFAULT_ADMIN_PASSWORD: $$cap_default_password
+      RESET_ADMIN_ON_BOOT: $$cap_reset_admin_on_boot
       GUARDIAN_SECRET_KEY: $$cap_guardian_key
       DATABASE_ENCRYPTION_KEY: $$cap_encryption_key
       SECRET_KEY_BASE: $$cap_secret_key
@@ -54,7 +55,9 @@ caproverOneClickApp:
       label: Default E-Mail
     - id: $$cap_default_password
       label: Default password
-      description: Minimum 6 symbols
+    - id: $$cap_reset_admin_on_boot
+      label: Reset admin on boot
+      description: true/false
     - id: $$cap_guardian_key
       label: Guardian key
       description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
