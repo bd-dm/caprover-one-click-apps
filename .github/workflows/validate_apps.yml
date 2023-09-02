@@ -3,10 +3,10 @@ name: Validate One Click Apps
 on:
   push:
     branches:
-      - master
+      - none
   pull_request:
     branches:
-      - master
+      - none
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 1
       - run: npm ci && npm run validate_apps && npm run formatter
         env:
           GITHUB_PERSONAL_TOKEN: ${{secrets.GITHUB_PERSONAL_TOKEN}}
