@@ -55,6 +55,7 @@ caproverOneClickApp:
       label: Default E-Mail
     - id: $$cap_default_password
       label: Default password
+      description: Minimum 12 symbols
     - id: $$cap_reset_admin_on_boot
       label: Reset admin on boot
       description: true/false
@@ -63,7 +64,7 @@ caproverOneClickApp:
       description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_encryption_key
       label: Encryption key
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
+      description: Use `openssl rand -base64 32`. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
     - id: $$cap_secret_key
       label: Secret key
       description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
@@ -94,6 +95,10 @@ caproverOneClickApp:
         }
       }
       ```
+      Also:
+        - Enable HTTPS
+        - Enable force to HTTPS
+        - Enable WebSocket support
       Then run:
       ```bash
       docker service scale srv-captain--$$cap_appname=0 && docker service update --cap-add NET_ADMIN --cap-add SYS_MODULE srv-captain--$$cap_appname && docker service scale srv-captain--$$cap_appname=1
