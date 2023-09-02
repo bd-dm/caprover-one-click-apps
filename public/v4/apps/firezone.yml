@@ -8,14 +8,14 @@ services:
         depends-on: $$cap_appname-postgres
         command: "bin/server"
         cap_add:
-          - NET_ADMIN
-          - SYS_MODULE
+            - NET_ADMIN
+            - SYS_MODULE
         ports:
-          - 0.0.0.0:51820:51820/udp
+            - 0.0.0.0:51820:51820/udp
         sysctls:
-          - net.ipv6.conf.all.disable_ipv6=0
-          - net.ipv4.ip_forward=1
-          - net.ipv6.conf.all.forwarding=1
+            - net.ipv6.conf.all.disable_ipv6=0
+            - net.ipv4.ip_forward=1
+            - net.ipv6.conf.all.forwarding=1
         environment:
             EXTERNAL_URL: $$cap_appname.$$cap_root_domain
             DATABASE_HOST: $$cap_appname-postgres
