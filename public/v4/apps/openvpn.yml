@@ -17,7 +17,6 @@ caproverOneClickApp:
   variables:
     - id: $$cap_host_addr
       label: Server IP
-  variables:
     - id: $$cap_net_adapter
       label: Network adapter
   instructions:
