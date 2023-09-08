@@ -1,15 +1,4 @@
 services:
-  db:
-    image: nikdi/cozy-db
-    environment:
-      DB_USER: dbuser
-      DB_PASS: dbpass
-    ports:
-      - 5984:5984
-#    volumes:
-#      - ./db-data:/opt/couchdb/data
-    networks:
-      - app
   server:
     image: nikdi/cozy-server
     environment:
@@ -30,6 +19,7 @@ services:
     ports:
       - 80:3100
       - 3200:3200
+      - 5984:5984
     networks:
       - app
 
