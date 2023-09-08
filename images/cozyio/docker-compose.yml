@@ -1,0 +1,36 @@
+services:
+  db:
+    image: nikdi/cozy-db
+    environment:
+      DB_USER: dbuser
+      DB_PASS: dbpass
+    ports:
+      - 5984:5984
+#    volumes:
+#      - ./db-data:/opt/couchdb/data
+    networks:
+      - app
+  server:
+    image: nikdi/cozy-server
+    environment:
+      DB_HOST: db
+      DB_USER: dbuser
+      DB_PASS: dbpass
+      DOMAIN: cozy.localhost
+      LOCALE: en
+      TIMEZONE: Europe/Moscow
+      COZY_PORT: 3100
+      COZY_ADMIN_PORT: 3200
+      COZY_ADMIN_EMAIL: brd.dmitry@gmail.com
+      COZY_ADMIN_PASSWORD: cozypass
+      APPS: home,banks,contacts,drive,notes,passwords,photos,settings,store
+#    volumes:
+#      - ./cozy-data:/etc/cozy
+    ports:
+      - 80:3100
+      - 3200:3200
+    networks:
+      - app
+
+networks:
+  app:
