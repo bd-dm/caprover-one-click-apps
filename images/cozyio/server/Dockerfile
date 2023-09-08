@@ -61,6 +61,7 @@ RUN apt install -y couchdb || true
 VOLUME /etc/cozy
 VOLUME /var/lib/cozy
 VOLUME /opt/couchdb/data
+VOLUME /opt/couchdb/etc/
 
 EXPOSE $COZY_PORT
 EXPOSE $COZY_ADMIN_PORT

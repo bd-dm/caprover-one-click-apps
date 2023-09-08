@@ -17,6 +17,7 @@ services:
       - $$cap_appname-cozy-config-data:/etc/cozy
       - $$cap_appname-cozy-data:/var/lib/cozy
       - $$cap_appname-cozy-db-data:/opt/couchdb/data
+      - $$cap_appname-cozy-db-config:/opt/couchdb/etc/
     ports:
       - $$cap_cozy_port:$$cap_cozy_port
       - $$cap_cozy_admin_port:$$cap_cozy_admin_port
