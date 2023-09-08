@@ -13,7 +13,7 @@ ENV TIMEZONE=${TIMEZONE}
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update
-RUN apt -y install nodejs imagemagick libprotobuf-c1 fonts-lato git wget sudo moreutils crudini ca-certificates apt-transport-https curl
+RUN apt -y install nodejs imagemagick libprotobuf-c1 fonts-lato git wget sudo moreutils crudini apt-transport-https gnupg
 
 RUN wget -O /tmp/go1.20.5.linux-amd64.tar.gz https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzvf /tmp/go1.20.5.linux-amd64.tar.gz
@@ -51,12 +51,11 @@ RUN chmod +x /etc/create-instance.sh
 RUN chmod +x /etc/start.sh
 RUN chmod +x /etc/start-db.sh
 
-# Install cozy-couchdb
-RUN wget https://apt.cozy.io/cozy-keyring.deb
-RUN dpkg -i cozy-keyring.deb
-RUN echo "deb https://apt.cozy.io/debian/ buster testing" > /etc/apt/sources.list.d/cozy.list
-RUN apt update
-RUN apt install cozy-couchdb -y
+# Install couchdb
+RUN curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1
+RUN . /etc/os-release
+RUN echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" \
+        | tee /etc/apt/sources.list.d/couchdb.list >/dev/null
 
 VOLUME /etc/cozy
 VOLUME /var/lib/cozy
