@@ -7,4 +7,5 @@ else
   echo "Config is already exists!"
 fi
 
+echo Database started!
 /opt/couchdb/bin/couchdb

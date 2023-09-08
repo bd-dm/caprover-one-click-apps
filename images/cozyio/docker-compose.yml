@@ -13,7 +13,6 @@ services:
   server:
     image: nikdi/cozy-server
     environment:
-      DB_HOST: db
       DB_USER: dbuser
       DB_PASS: dbpass
       DOMAIN: cozy.localhost
@@ -25,7 +24,9 @@ services:
       COZY_ADMIN_PASSWORD: cozypass
       APPS: home,banks,contacts,drive,notes,passwords,photos,settings,store
 #    volumes:
-#      - ./cozy-data:/etc/cozy
+#      - ./cozy-data:/var/lib/cozy
+#      - ./cozy-config-data:/etc/cozy
+#      - ./db-data:/opt/couchdb/data
     ports:
       - 80:3100
       - 3200:3200

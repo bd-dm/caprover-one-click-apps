@@ -1,6 +1,5 @@
 FROM ubuntu:20.04
 
-ENV DB_HOST=${DB_HOST}
 ENV DB_USER=${DB_USER}
 ENV DB_PASS=${DB_PASS}
 ENV COZY_PORT=${COZY_PORT}
@@ -14,7 +13,7 @@ ENV TIMEZONE=${TIMEZONE}
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update
-RUN apt -y install nodejs imagemagick libprotobuf-c1 fonts-lato git wget sudo moreutils
+RUN apt -y install nodejs imagemagick libprotobuf-c1 fonts-lato git wget sudo moreutils crudini ca-certificates apt-transport-https curl
 
 RUN wget -O /tmp/go1.20.5.linux-amd64.tar.gz https://go.dev/dl/go1.20.5.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzvf /tmp/go1.20.5.linux-amd64.tar.gz
@@ -46,11 +45,22 @@ RUN install -o cozy-stack -g cozy -m 750 -d /var/lib/cozy
 COPY ./create-config.sh /etc/create-config.sh
 COPY ./create-instance.sh /etc/create-instance.sh
 COPY ./start.sh /etc/start.sh
+COPY ./start-db.sh /etc/start-db.sh
 RUN chmod +x /etc/create-config.sh
 RUN chmod +x /etc/create-instance.sh
 RUN chmod +x /etc/start.sh
+RUN chmod +x /etc/start-db.sh
+
+# Install cozy-couchdb
+RUN wget https://apt.cozy.io/cozy-keyring.deb
+RUN dpkg -i cozy-keyring.deb
+RUN echo "deb https://apt.cozy.io/debian/ buster testing" > /etc/apt/sources.list.d/cozy.list
+RUN apt update
+RUN apt install cozy-couchdb -y
 
 VOLUME /etc/cozy
+VOLUME /var/lib/cozy
+VOLUME /opt/couchdb/data
 
 EXPOSE $COZY_PORT
 EXPOSE $COZY_ADMIN_PORT

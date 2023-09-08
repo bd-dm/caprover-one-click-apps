@@ -19,7 +19,7 @@ admin:
   port: ${COZY_ADMIN_PORT}
 
 couchdb:
-  url: http://${DB_USER}:${DB_PASS}@${DB_HOST}:5984/
+  url: http://${DB_USER}:${DB_PASS}@0.0.0.0:5984/
 
 fs:
   url: file:///var/lib/cozy
