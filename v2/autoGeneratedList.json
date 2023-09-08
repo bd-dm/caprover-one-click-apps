@@ -1,1 +1,1 @@
-{"appList":["firezone","openvpn"],"appDetails":[{"name":"firezone","displayName":"Firezone","description":"Firezone","isOfficial":false,"logoUrl":"firezone.png"},{"name":"openvpn","displayName":"OpenVPN","description":"OpenVPN","isOfficial":false,"logoUrl":"openvpn.png"}]}
+{"appList":["cozyio","firezone"],"appDetails":[{"name":"cozyio","displayName":"Firezone","description":"Firezone","isOfficial":false,"logoUrl":"cozyio.png"},{"name":"firezone","displayName":"Firezone","description":"Firezone","isOfficial":false,"logoUrl":"firezone.png"}]}
