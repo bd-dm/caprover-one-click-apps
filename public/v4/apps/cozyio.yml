@@ -3,69 +3,63 @@ services:
   $$cap_appname-db:
     image: nikdi/cozyio-db
     environment:
-      DB_USER: $$cap_appname-db-user
-      DB_PASS: $$cap_appname-db-pass
+      DB_USER: $$cap_db_user
+      DB_PASS: $$cap_db_pass
     ports:
       - 5984:5984
     volumes:
       - $$cap_appname-db-data:/opt/couchdb/data
-    networks:
-      - app
     caproverExtra:
       notExposeAsWebApp: 'true'
-  $$cap_appname-stack:
+  $$cap_appname:
     image: nikdi/cozyio-server
     environment:
-      DB_HOST: $$cap_appname-db
-      DB_USER: $$cap_appname-db-user
-      DB_PASS: $$cap_appname-db-pass
-      DOMAIN: $$cap_appname-domain
-      LOCALE: $$cap_appname-locale
-      TIMEZONE: $$cap_appname-timezone
-      COZY_PORT: $$cap_appname-cozy-port
-      COZY_ADMIN_PORT: $$cap_appname-cozy-admin-port
-      COZY_ADMIN_EMAIL: $$cap_appname-admin-email
-      COZY_ADMIN_PASSWORD: $$cap_appname-admin-pass
-      APPS: $$cap_appname-apps
+      DB_HOST: srv-captain--$$cap_appname-db
+      DB_USER: $$cap_db_user
+      DB_PASS: $$cap_db_pass
+      DOMAIN: $$cap_appname.$$cap_root_domain
+      LOCALE: $$cap_locale
+      TIMEZONE: $$cap_timezone
+      COZY_PORT: $$cap_cozy_port
+      COZY_ADMIN_PORT: $$cap_cozy_admin_port
+      COZY_ADMIN_EMAIL: $$cap_admin_email
+      COZY_ADMIN_PASSWORD: $$cap_admin_pass
+      APPS: $$cap_cozy_apps
     volumes:
       - $$cap_appname-cozy-data:/etc/cozy
     ports:
-      - 3100:3100
-      - 3200:3200
-    networks:
-      - app
+      - $$cap_cozy_port:$$cap_cozy_port
+      - $$cap_cozy_admin_port:$$cap_cozy_admin_port
     caproverExtra:
-      containerHttpPort: '3100'
+      containerHttpPort: $$cap_cozy_port
 caproverOneClickApp:
   variables:
-    - id: $$cap_appname-db-user
+    - id: $$cap_db_user
       label: DB Username
       defaultValue: cozy
-    - id: $$cap_appname-db-pass
+    - id: $$cap_db_pass
       label: DB Password
       defaultValue: cozypassword
-    - id: $$cap_appname-domain
-      label: App Domain
-      defaultValue: $$cap_appname.$$cap_root_domain
-    - id: $$cap_appname-locale
+    - id: $$cap_locale
       label: Locale
       defaultValue: en
-    - id: $$cap_appname-timezone
+    - id: $$cap_timezone
       label: TimeZone
       defaultValue: Europe/Moscow
-    - id: $$cap_appname-cozy-port
+    - id: $$cap_cozy_port
       label: Cozy port
       defaultValue: '6100'
-    - id: $$cap_appname-cozy-admin-port
+    - id: $$cap_cozy_admin_port
       label: Cozy admin-panel port
       defaultValue: '6200'
-    - id: $$cap_appname-admin-email
+    - id: $$cap_admin_email
       label: Admin user E-Mail
-    - id: $$cap_appname-admin-pass
+    - id: $$cap_admin_pass
       label: Admin user password
-    - id: $$cap_appname-apps
+    - id: $$cap_cozy_apps
       label: Apps list
       defaultValue: home,banks,contacts,drive,notes,passwords,photos,settings,store
+  instructions: Enable HTTPS
   displayName: Cozy.io
   description: Cozy.io
   documentation: https://docs.cozy.io/
