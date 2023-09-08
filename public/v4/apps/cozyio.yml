@@ -1,7 +1,7 @@
 captainVersion: 4
 services:
   $$cap_appname-db:
-    image: nikdi/cozy-db
+    image: nikdi/cozyio-db
     environment:
       DB_USER: $$cap_appname-db-user
       DB_PASS: $$cap_appname-db-pass
@@ -14,7 +14,7 @@ services:
     caproverExtra:
       notExposeAsWebApp: 'true'
   $$cap_appname-stack:
-    image: nikdi/cozy-server
+    image: nikdi/cozyio-server
     environment:
       DB_HOST: $$cap_appname-db
       DB_USER: $$cap_appname-db-user
@@ -35,71 +35,37 @@ services:
     networks:
       - app
     caproverExtra:
-      containerHttpPort: '13000'
+      containerHttpPort: '3100'
 caproverOneClickApp:
   variables:
-    - id: $$cap_firezone_version
-      label: Firezone Version Tag
-      description: Check out their Docker page for the valid tags https://hub.docker.com/r/firezone/firezone/tags
-      defaultValue: 0.7.35
-      validRegex: /^([^\s^\/])+$/
-    - id: $$cap_postgres_version
-      label: Postgres Version Tag
-      description: Check out their Docker page for the valid tags https://hub.docker.com/_/postgres/tags
-      defaultValue: 15.4
-      validRegex: /^([^\s^\/])+$/
-    - id: $$cap_default_email
-      label: Default E-Mail
-    - id: $$cap_default_password
-      label: Default password
-      description: Minimum 12 symbols
-    - id: $$cap_reset_admin_on_boot
-      label: Reset admin on boot
-      description: true/false
-    - id: $$cap_guardian_key
-      label: Guardian key
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-    - id: $$cap_encryption_key
-      label: Encryption key
-      description: Use `openssl rand -base64 32`. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-    - id: $$cap_secret_key
-      label: Secret key
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-    - id: $$cap_live_view_salt
-      label: Live view salt
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-    - id: $$cap_cookie_signing_salt
-      label: Cookie signing salt
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-    - id: $$cap_cookie_encryption_salt
-      label: Cookie encryption salt
-      description: Use `openssl rand -base64 64` and then convert this string to base64. More info https://www.firezone.dev/docs/reference/env-vars#secrets-and-encryption
-  instructions:
-    start: To generate secret keys, use `openssl rand -base64 64`
-    end: |
-      Firezone is deployed and available from the url http://$$cap_appname.$$cap_root_domain.
-      Add to Service Update Override: 
-      ```json
-      {
-        "TaskTemplate": {
-          "ContainerSpec": {
-            "SysCtls": {
-              "net.ipv4.ip_forward": "1",
-              "net.ipv6.conf.all.disable_ipv6": "0",
-              "net.ipv6.conf.all.forwarding": "1"
-            }
-          }
-        }
-      }
-      ```
-      Also:
-        - Enable HTTPS
-        - Enable force to HTTPS
-        - Enable WebSocket support
-      Then run:
-      ```bash
-      docker service scale srv-captain--$$cap_appname=0 && docker service update --cap-add NET_ADMIN --cap-add SYS_MODULE srv-captain--$$cap_appname && docker service scale srv-captain--$$cap_appname=1
-      ```
-  displayName: Firezone
-  description: Firezone
-  documentation: https://www.firezone.dev/docs
+    - id: $$cap_appname-db-user
+      label: DB Username
+      defaultValue: cozy
+    - id: $$cap_appname-db-pass
+      label: DB Password
+      defaultValue: cozypassword
+    - id: $$cap_appname-domain
+      label: App Domain
+      defaultValue: $$cap_appname.$$cap_root_domain
+    - id: $$cap_appname-locale
+      label: Locale
+      defaultValue: en
+    - id: $$cap_appname-timezone
+      label: TimeZone
+      defaultValue: Europe/Moscow
+    - id: $$cap_appname-cozy-port
+      label: Cozy port
+      defaultValue: '6100'
+    - id: $$cap_appname-cozy-admin-port
+      label: Cozy admin-panel port
+      defaultValue: '6200'
+    - id: $$cap_appname-admin-email
+      label: Admin user E-Mail
+    - id: $$cap_appname-admin-pass
+      label: Admin user password
+    - id: $$cap_appname-apps
+      label: Apps list
+      defaultValue: home,banks,contacts,drive,notes,passwords,photos,settings,store
+  displayName: Cozy.io
+  description: Cozy.io
+  documentation: https://docs.cozy.io/
