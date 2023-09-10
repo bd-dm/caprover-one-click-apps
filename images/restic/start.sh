@@ -1,5 +1,6 @@
 if [ -f "/host${VPN_CONFIG_PATH}" ]; then
   echo Connecting to VPN...
+  mkdir /etc/wireguard
   cp "/host${VPN_CONFIG_PATH}" /etc/wireguard/wg0.conf
   wg-quick up wg0
   sleep 5
