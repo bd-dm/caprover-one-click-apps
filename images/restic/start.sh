@@ -1,3 +1,10 @@
+if [ -f "/host${VPN_CONFIG_PATH}" ]; then
+  echo Connecting to VPN...
+  cp "/host${VPN_CONFIG_PATH}" /etc/wireguard/wg0.conf
+  wg-quick up wg0
+  sleep 5
+fi
+
 if restic snapshots -v &> /dev/null ; then
   echo "repository is already initialized, skipping init command"
 else
@@ -7,12 +14,12 @@ else
 fi
 
 # Create crontab file
-BACKUP_FOLDERS_ARRAY=($(echo $BACKUP_FOLDERS | tr "," "\n"))
+BACKUP_FOLDERS_ARRAY=$(echo $BACKUP_FOLDERS | tr "," "\n")
 echo "Backup folders: ${BACKUP_FOLDERS}"
 
 for folder in "${!BACKUP_FOLDERS_ARRAY[@]}"
 do
-  echo "${CRON_BACKUP_SCHEDULE} restic backup /host/${folder}" >> /etc/crontabs/root
+  echo "${CRON_BACKUP_SCHEDULE} restic backup /host${folder}" >> /etc/crontabs/root
 done
 echo "${CRON_CLEANUP_SCHEDULE} restic forget --keep-last ${KEEP_BACKUPS}" >> /etc/crontabs/root
 
