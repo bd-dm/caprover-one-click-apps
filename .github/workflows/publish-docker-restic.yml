@@ -1,4 +1,4 @@
-name: Publish Docker Images
+name: Publish Restic Docker Image
 on:
   push:
     paths:

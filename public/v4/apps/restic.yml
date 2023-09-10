@@ -12,6 +12,8 @@ services:
       KEEP_BACKUPS: $$cap_keep_backups
       BACKUP_FOLDERS: $$cap_backup_folders
       VPN_CONFIG_PATH: $$cap_vpn_config_path
+    cap_add:
+      - NET_ADMIN
     volumes:
       - /:/host:ro
     caproverExtra:

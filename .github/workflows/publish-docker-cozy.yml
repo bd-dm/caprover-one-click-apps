@@ -1,4 +1,4 @@
-name: Publish Docker Images
+name: Publish CozyIO Docker Image
 on:
   push:
     paths:
