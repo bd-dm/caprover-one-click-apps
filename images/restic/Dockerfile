@@ -13,8 +13,7 @@ WORKDIR /app
 COPY start.sh . 
 RUN chmod +x start.sh
 
-RUN apt update
-RUN apt install wireguard
+RUN apk add wireguard-tools-wg-quick
 
 VOLUME /backup
 
