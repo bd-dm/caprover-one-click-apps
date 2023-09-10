@@ -7,8 +7,8 @@ else
 fi
 
 # Create crontab file
-touch /etc/crontabs/root
-echo "${CRON_BACKUP_SCHEDULE} restic backup /backup" >> /etc/crontabs/root
-echo "${CRON_CLEANUP_SCHEDULE} restic forget --keep-last ${KEEP_BACKUPS}" >> /etc/crontabs/root
+touch /etc/crontabs/root/cronjobs
+echo "${CRON_BACKUP_SCHEDULE} restic backup /backup" >> /etc/crontabs/root/cronjobs
+echo "${CRON_CLEANUP_SCHEDULE} restic forget --keep-last ${KEEP_BACKUPS}" >> /etc/crontabs/root/cronjobs
 
 crond -f -d 8
