@@ -1,11 +1,3 @@
-if [ -f "/host${VPN_CONFIG_PATH}" ]; then
-  echo Connecting to VPN...
-  mkdir /etc/wireguard
-  cp "/host${VPN_CONFIG_PATH}" /etc/wireguard/wg0.conf
-  wg-quick up wg0
-  sleep 5
-fi
-
 if restic snapshots -v &> /dev/null ; then
   echo "repository is already initialized, skipping init command"
 else
