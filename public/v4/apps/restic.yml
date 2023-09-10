@@ -10,6 +10,9 @@ services:
       CRON_BACKUP_SCHEDULE: $$cap_cron_backup_schedule
       CRON_CLEANUP_SCHEDULE: $$cap_cron_cleanup_schedule
       KEEP_BACKUPS: $$cap_keep_backups
+      BACKUP_FOLDERS: $$cap_backup_folders
+    volumes:
+      - /:/host:ro
     caproverExtra:
       notExposeAsWebApp: 'true'
 caproverOneClickApp:
@@ -34,6 +37,10 @@ caproverOneClickApp:
     - id: $$cap_keep_backups
       label: Number of backups to keep
       defaultValue: "15"
+    - id: $$cap_backup_folders
+      label: Backup folders
+      description: Backup folders separated with comma (,). Should be absolute path like `/home/user/file`
+      defaultValue: ""
   instructions: After deploying, create a volumes pointing to backup files on a host machine and /backup/[folder] on a container. For example `/home/root:/backup/home-root`
   displayName: Restic backup
   description: Restic backup
