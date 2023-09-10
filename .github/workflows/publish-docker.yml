@@ -30,3 +30,11 @@ jobs:
           push: true
           tags: nikdi/cozyio-server:latest
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image restic
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./images/restic
+          push: true
+          tags: nikdi/restic:latest
+          labels: ${{ steps.meta.outputs.labels }}
